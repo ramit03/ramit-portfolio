@@ -15,7 +15,6 @@ function page() {
         </span>, leading the development projects. </h2>
         </div>  
         <MoonAnimation/>
-        
       </section>
     </main>
   );

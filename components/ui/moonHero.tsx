@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/utils/cn";
+import { PiSpiralFill } from "react-icons/pi";
 
 interface Star {
   id: number;
@@ -12,6 +12,15 @@ interface Star {
 const MoonAnimation: React.FC = () => {
   const [stars, setStars] = useState<Star[]>([]);
   const [starId, setStarId] = useState(0);
+  const [animateButton, setAnimateButton] = useState(false);
+
+  useEffect(() => {
+    if (stars.length > 0) {
+      setAnimateButton(true);
+    } else {
+      setAnimateButton(false);
+    }
+  }, [stars]);
 
   const addStar = () => {
     const newStar: Star = {
@@ -27,45 +36,45 @@ const MoonAnimation: React.FC = () => {
     setStars([]);
   };
 
-    const blackHoleVariants = {
+  const blackHoleVariants = {
     initial: {
-      scale: 0.8,
-      rotate: 0
+      scale: 1,
+      rotate: 0,
     },
     animate: {
-      scale: [0.8, 0.85, 0.8],
+      scale: [0.9, 1, 0.9],
       rotate: [0, 360],
       transition: {
         scale: {
-          duration: 2,
+          duration: 3,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "easeInOut",
         },
         rotate: {
-          duration: 8,
+          duration: 4,
           repeat: Infinity,
-          ease: "linear"
-        }
-      }
-    }
+          ease: "linear",
+        },
+      },
+    },
   };
 
-  const starVariants = {
+  const clearButtonVariants = {
     initial: {
-      opacity: 1,
-      x: 0,
-      y: 0
+      opacity: 0,
+      y: 10,
     },
     animate: {
-      opacity: [1, 0.5, 0],
-      x: [0, -20, -50],
-      y: [0, 20, 50],
+      opacity: 1,
+      y: 0,
       transition: {
-        duration: 2,
-        repeat: Infinity,
-        repeatDelay: 1
-      }
-    }
+        duration: 0.8,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 10,
+    },
   };
 
   return (
@@ -159,7 +168,12 @@ const MoonAnimation: React.FC = () => {
           }}
         />
       ))}
-      <div className="relative inline-flex group size-12">
+      <motion.div
+        variants={clearButtonVariants}
+        initial="initial"
+        animate={animateButton ? "animate" : "hidden"}
+        className="relative inline-flex group size-12"
+      >
         {stars.length > 0 ? (
           <>
             <div className="absolute  focus:border-none  transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-sec via-ter to-light rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt" />
@@ -171,25 +185,19 @@ const MoonAnimation: React.FC = () => {
               className={`relative size-12 inline-flex items-center justify-center  text-2xl font-semibold text-textcol transition-all hover:border-2 hover:border-light duration-200 bg-gray-900  rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 `}
               role="button"
             >
-               <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 1024 1024"
-      fill="none"
-      stroke="rgb(234,179,8)"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-8 h-8"
-    >
-      <path d="M512 960C512 960 485.4 912.6 470.6 870.6C455.8 828.6 448 800 448 800H576C576 800 568.2 828.6 553.4 870.6C538.6 912.6 512 960 512 960Z" />
-      <path d="M712.6 583.4L748.8 512L712.6 440.6L768 320L576 448L528 192L480 448L288 320L343.4 440.6L307.2 512L343.4 583.4L288 704L480 576L528 832L576 576L768 704L712.6 583.4Z" />
-    </svg>
+              <motion.div
+                variants={blackHoleVariants}
+                initial="initial"
+                animate="animate"
+              >
+                <PiSpiralFill color="#5591a9" />
+              </motion.div>
             </button>
           </>
         ) : (
           <></>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };
